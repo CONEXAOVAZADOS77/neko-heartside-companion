@@ -4,7 +4,7 @@ import {
   Bug, Eye, Flag, Image as ImageIcon, Instagram, LayoutGrid, Lightbulb, Lock,
   LogOut, Menu, MessageCircle, MessageSquare, Monitor, Palette, Puzzle, Search,
   Send, Shield, Sparkles, Star, Store, UsersRound, Video, WandSparkles, Waves,
-  X, Zap,
+  Workflow, X, Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
@@ -46,6 +46,8 @@ const menuGroups = [
   { title: "FERRAMENTAS", items: [[Palette, "Wallpaper"], [Zap, "Upscale 4K"], [Waves, "Limpar Metadados"], [Shield, "Camuflar Criativo"]] },
   { title: "MINHA CONTA", items: [[ImageIcon, "Minha Galeria"], [MessageSquare, "Biblioteca de Prompts"], [UsersRound, "Comunidade"], [Coins, "Créditos"]] },
 ] as const;
+
+const feedbackTypes = [[Lightbulb, "Sugestão"], [Star, "Avaliação"], [Flag, "Reclamação"], [Bug, "Bug"]] as const;
 
 function DashboardLogo() {
   return <Link to="/" className="dash-brand"><span className="neko-face"><i /><b /><em /></span><span>Neko <strong>IA</strong></span></Link>;
@@ -94,7 +96,7 @@ function Dashboard() {
         </div>
       </section>
       <Button className="feedback-fab" size="icon" onClick={() => setFeedbackOpen(true)} aria-label="Enviar opinião"><MessageCircle /></Button>
-      {feedbackOpen && <div className="feedback-overlay" role="presentation" onMouseDown={() => setFeedbackOpen(false)}><section className="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedback-title" onMouseDown={(event) => event.stopPropagation()}><Button variant="ghost" size="icon" className="feedback-close" onClick={() => setFeedbackOpen(false)} aria-label="Fechar"><X /></Button><h2 id="feedback-title">Mande sua opinião</h2><p>Sugestões, reclamações, avaliações ou bugs — tudo conta</p><label>TIPO</label><div className="feedback-types">{[[Lightbulb,"Sugestão"],[Star,"Avaliação"],[Flag,"Reclamação"],[Bug,"Bug"]].map(([Icon,label])=><button className={feedbackType===label?"active":""} onClick={()=>setFeedbackType(label as string)} key={label as string}><Icon /><span>{label as string}</span></button>)}</div><label htmlFor="feedback-text">SUA SUGESTÃO</label><textarea id="feedback-text" value={feedback} maxLength={4000} onChange={(event)=>setFeedback(event.target.value)} placeholder="Ex: Seria legal se tivesse um botão pra duplicar influencer..."/><small>{feedback.length}/4000</small><div className="feedback-actions"><Button variant="outline" onClick={()=>setFeedbackOpen(false)}><X /> Cancelar</Button><Button disabled={!feedback.trim()} onClick={()=>{setFeedback("");setFeedbackOpen(false)}}><Send /> Enviar</Button></div></section></div>}
+      {feedbackOpen && <div className="feedback-overlay" role="presentation" onMouseDown={() => setFeedbackOpen(false)}><section className="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedback-title" onMouseDown={(event) => event.stopPropagation()}><Button variant="ghost" size="icon" className="feedback-close" onClick={() => setFeedbackOpen(false)} aria-label="Fechar"><X /></Button><h2 id="feedback-title">Mande sua opinião</h2><p>Sugestões, reclamações, avaliações ou bugs — tudo conta</p><label>TIPO</label><div className="feedback-types">{feedbackTypes.map(([Icon,label])=><Button variant="outline" className={feedbackType===label?"active":""} onClick={()=>setFeedbackType(label)} key={label}><Icon /><span>{label}</span></Button>)}</div><label htmlFor="feedback-text">SUA SUGESTÃO</label><textarea id="feedback-text" value={feedback} maxLength={4000} onChange={(event)=>setFeedback(event.target.value)} placeholder="Ex: Seria legal se tivesse um botão pra duplicar influencer..."/><small>{feedback.length}/4000</small><div className="feedback-actions"><Button variant="outline" onClick={()=>setFeedbackOpen(false)}><X /> Cancelar</Button><Button disabled={!feedback.trim()} onClick={()=>{setFeedback("");setFeedbackOpen(false)}}><Send /> Enviar</Button></div></section></div>}
     </main>
   );
 }
