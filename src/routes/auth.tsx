@@ -14,7 +14,7 @@ import photo9 from "../assets/dashboard/photo9.webp.asset.json";
 import { Button } from "../components/ui/button";
 import { Checkbox } from "../components/ui/checkbox";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Entrar — Neko IA" },
