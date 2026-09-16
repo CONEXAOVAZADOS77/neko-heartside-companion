@@ -124,7 +124,7 @@ function Index() {
         <nav className="nav-bar" aria-label="Navegação principal">
           <Logo />
           <div className="nav-links"><a href="#recursos">Recursos</a><a href="#como-funciona">Como Funciona</a><a href="#galeria">Galeria</a><a href="#precos">Preços</a></div>
-          <div className="nav-actions"><Link to="/dashboard" className="login">Entrar</Link><Link to="/dashboard" className="primary small">Criar conta grátis <ArrowRight /></Link></div>
+          <div className="nav-actions"><Link to="/auth" className="login">Entrar</Link><Link to="/auth" className="primary small">Criar conta grátis <ArrowRight /></Link></div>
         </nav>
       </header>
 

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Apple, Eye, EyeOff } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
@@ -44,13 +44,14 @@ function GoogleIcon() {
 }
 
 function DashboardLogin() {
+  const navigate = useNavigate({ from: "/auth" });
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const [message, setMessage] = useState("");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage("Preencha seus dados para continuar.");
+    navigate({ to: "/dashboard" });
   }
 
   return (
@@ -86,7 +87,7 @@ function DashboardLogin() {
             <Button className="email-submit" type="submit">Entrar com email</Button>
             <div className="login-divider"><span>Ou</span></div>
 
-            <Button className="social-login" type="button" variant="outline" onClick={() => setMessage("O acesso com Google estará disponível em breve.")}><GoogleIcon /> Continuar com Google</Button>
+            <Button className="social-login" type="button" variant="outline" onClick={() => navigate({ to: "/dashboard" })}><GoogleIcon /> Continuar com Google</Button>
             <Button className="social-login" type="button" variant="outline" onClick={() => setMessage("O acesso com Apple estará disponível em breve.")}><Apple /> Continuar com Apple</Button>
             <p className="login-status" aria-live="polite">{message}</p>
           </form>
