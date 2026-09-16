@@ -130,7 +130,7 @@ function Index() {
 
       <section id="galeria" className="section">
         <SectionTitle eyebrow="Casos de uso">Pra qualquer <em>tipo de conteúdo</em>.</SectionTitle>
-        <div className="use-grid">{useCases.map(([tag,title,text],i)=><article key={tag} style={{backgroundImage:`linear-gradient(to top, var(--background) 2%, transparent 85%), url(${gallery[i+1].url})`}}><span>{tag}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
+        <div className="use-grid">{useCases.map(([tag,title,text],i)=><article key={tag} style={{backgroundImage:`linear-gradient(to top, var(--background) 2%, transparent 85%), url(${gallery.at(i + 1)?.url ?? style1.url})`}}><span>{tag}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
       </section>
 
       <section className="section workflows-section">
