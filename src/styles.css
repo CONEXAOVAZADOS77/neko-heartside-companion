@@ -125,3 +125,72 @@ footer{max-width:1060px;margin:auto;padding:40px 28px 60px;border-top:1px solid 
   .nav-actions .primary{font-size:0;width:40px;padding:0}.nav-actions .primary svg{width:15px}.hero h1{font-size:39px}.model-pill{font-size:8px}.hero-actions{flex-direction:column;align-items:stretch;padding:0 16px}.mini-benefits span{font-size:0;padding:8px}.mini-benefits svg{width:14px}.tool-grid,.use-grid,.templates{grid-template-columns:1fr}.use-grid article{height:430px}.media-grid article{grid-template-columns:1fr}.media-grid article .media-copy{position:relative!important;width:auto!important}.style-collage{grid-template-columns:repeat(2,1fr)}.adult-inner{padding-inline:18px}.adult-grid{gap:6px}.plan{padding:25px}.desktop{display:none}
 }
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.primary,.rotating-word{transition:none}}
+
+/* Dashboard access */
+.dashboard-login-page { min-height: 100vh; height: 100svh; display: grid; grid-template-columns: 37.5% 62.5%; background: var(--background); overflow: hidden; }
+.login-panel { position: relative; z-index: 4; display: flex; align-items: center; justify-content: center; background: var(--background); }
+.login-panel::after { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; right: -160px; width: 240px; background: linear-gradient(90deg, var(--background) 25%, transparent); pointer-events: none; }
+.login-card { width: min(292px, calc(100% - 48px)); margin-top: -10px; }
+.dashboard-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 25px; line-height: 1; font-weight: 800; margin-bottom: 24px; }
+.dashboard-logo strong { color: var(--primary); }
+.neko-face { width: 34px; height: 29px; position: relative; display: inline-block; border: 2px solid var(--primary); border-top: 0; border-radius: 7px 7px 15px 15px; }
+.neko-face::before,.neko-face::after { content: ""; position: absolute; width: 13px; height: 13px; top: -6px; border-top: 2px solid var(--primary); }
+.neko-face::before { left: -2px; border-left: 2px solid var(--primary); transform: skewY(24deg); border-radius: 4px 0 0; }
+.neko-face::after { right: -2px; border-right: 2px solid var(--primary); transform: skewY(-24deg); border-radius: 0 4px 0 0; }
+.neko-face i,.neko-face b { position: absolute; width: 5px; height: 2px; top: 13px; background: var(--primary); border-radius: 100%; }
+.neko-face i { left: 7px; transform: rotate(18deg); }.neko-face b { right: 7px; transform: rotate(-18deg); }
+.neko-face em { position: absolute; width: 6px; height: 3px; left: 12px; bottom: 5px; border-bottom: 2px solid var(--primary); border-radius: 50%; }
+.login-heading { margin-bottom: 27px; }
+.login-heading h1 { margin: 0 0 8px; font-size: 18px; line-height: 1.2; font-weight: 800; }
+.login-heading p { margin: 0; color: var(--muted-foreground); font-size: 10px; }
+.login-card form { display: flex; flex-direction: column; }
+.login-card label,.password-label { color: var(--muted-foreground); font-size: 10px; font-weight: 600; }
+.login-card input { width: 100%; height: 31px; border: 1px solid var(--border); border-radius: 8px; outline: none; background: var(--card); color: var(--foreground); padding: 0 12px; font: inherit; font-size: 10px; transition: border-color .2s, box-shadow .2s; }
+.login-card input::placeholder { color: color-mix(in oklab, var(--muted-foreground) 65%, transparent); }
+.login-card input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 16%, transparent); }
+.login-card > form > label:first-child { margin-bottom: 8px; }
+.password-label { display: flex; justify-content: space-between; align-items: center; margin: 17px 0 8px; }
+.password-label a,.signup-line a { color: var(--primary); font-weight: 800; }
+.password-field { position: relative; }
+.password-field input { padding-right: 35px; }
+.password-field button { position: absolute; width: 30px; height: 30px; right: 1px; top: 1px; color: var(--muted-foreground); background: transparent; }
+.password-field button:hover { color: var(--foreground); background: transparent; }
+.password-field svg { width: 13px; height: 13px; }
+.remember-row { display: flex; align-items: center; gap: 7px; margin: 16px 0; cursor: pointer; }
+.remember-row button { width: 12px; height: 12px; min-width: 12px; border: 0; border-radius: 2px; background: var(--card); }
+.remember-row button[data-state="checked"] { background: var(--primary); color: var(--primary-foreground); }
+.remember-row svg { width: 9px; height: 9px; }
+.login-card .email-submit { height: 30px; min-height: 30px; border-radius: 8px; background: var(--foreground); color: var(--background); font-size: 10px; font-weight: 800; box-shadow: none; }
+.login-divider { display: flex; align-items: center; gap: 12px; color: var(--muted-foreground); font-size: 8px; margin: 17px 0; }
+.login-divider::before,.login-divider::after { content: ""; height: 1px; flex: 1; background: var(--border); }
+.login-card .social-login { height: 30px; min-height: 30px; margin-bottom: 9px; border-color: var(--border); background: transparent; color: var(--foreground); border-radius: 8px; font-size: 10px; font-weight: 700; box-shadow: none; }
+.login-card .social-login:hover { background: var(--card); }
+.social-login svg { width: 12px; height: 12px; }
+.google-mark { font-weight: 900; font-size: 13px; color: oklch(0.7 0.2 145); }
+.login-status { height: 13px; margin: 0; text-align: center; color: var(--primary); font-size: 8px; }
+.signup-line { text-align: center; color: var(--muted-foreground); font-size: 10px; margin: 11px 0 35px; }
+.login-legal { margin: 0; text-align: center; color: color-mix(in oklab, var(--muted-foreground) 46%, transparent); font-size: 7px; line-height: 1.5; }
+.login-legal a { text-decoration: underline; }
+.influencer-wall { position: relative; overflow: hidden; background: var(--card); }
+.influencer-wall::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in oklab, var(--background) 52%, transparent) 0%, transparent 28%), linear-gradient(0deg, color-mix(in oklab, var(--background) 52%, transparent), transparent 38%); pointer-events: none; }
+.wall-grid { position: absolute; width: 118%; height: 118%; left: -2%; top: -9%; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 35%; gap: 10px; transform: rotate(-13deg) scale(1.08); }
+.wall-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 13px; filter: brightness(.61) saturate(.78); }
+.wall-grid img:nth-child(2),.wall-grid img:nth-child(6),.wall-grid img:nth-child(10) { transform: translateY(-55px); }
+.wall-grid img:nth-child(4),.wall-grid img:nth-child(8),.wall-grid img:nth-child(12) { transform: translateY(-90px); }
+.wall-copy { position: absolute; z-index: 2; right: 24px; bottom: 28px; text-align: right; }
+.wall-copy strong { font-size: 14px; }
+.wall-copy p { margin: 8px 0 0; color: var(--muted-foreground); font-size: 9px; line-height: 1.5; }
+@media (min-width: 1600px) { .login-card { width: 340px; }.login-heading h1 { font-size: 21px; }.login-card input,.login-card .email-submit,.login-card .social-login { height: 36px; min-height: 36px; }.login-card label,.password-label,.remember-row,.signup-line { font-size: 11px; } }
+@media (max-width: 760px) {
+  .dashboard-login-page { grid-template-columns: 1fr; position: relative; min-height: 100svh; height: auto; }
+  .influencer-wall { position: absolute; inset: 0; opacity: .28; }
+  .influencer-wall::after { background: color-mix(in oklab, var(--background) 58%, transparent); }
+  .wall-grid { width: 155%; height: 130%; left: -28%; }
+  .wall-copy { display: none; }
+  .login-panel { min-height: 100svh; background: color-mix(in oklab, var(--background) 78%, transparent); backdrop-filter: blur(6px); }
+  .login-panel::after { display: none; }
+  .login-card { width: min(344px, calc(100% - 42px)); margin: 0; padding: 42px 26px; border: 1px solid color-mix(in oklab, var(--border) 70%, transparent); border-radius: 12px; background: color-mix(in oklab, var(--background) 87%, transparent); }
+  .dashboard-logo { font-size: 24px; }.login-heading h1 { font-size: 20px; }
+  .login-card input,.login-card .email-submit,.login-card .social-login { height: 42px; min-height: 42px; }
+  .password-field button { width: 40px; height: 40px; }.login-card label,.password-label,.remember-row,.signup-line { font-size: 11px; }
+}

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
@@ -79,7 +79,7 @@ const faqs = [
 ];
 
 function Logo() {
-  return <a href="#topo" className="brand" aria-label="Neko IA, início"><span className="brand-mark">⌁</span> Neko <b>IA</b></a>;
+  return <Link to="/" className="brand" aria-label="Neko IA, início"><span className="brand-mark">⌁</span> Neko <b>IA</b></Link>;
 }
 
 function SectionTitle({ eyebrow, children, text }: { eyebrow: string; children: React.ReactNode; text?: string }) {
@@ -124,7 +124,7 @@ function Index() {
         <nav className="nav-bar" aria-label="Navegação principal">
           <Logo />
           <div className="nav-links"><a href="#recursos">Recursos</a><a href="#como-funciona">Como Funciona</a><a href="#galeria">Galeria</a><a href="#precos">Preços</a></div>
-          <div className="nav-actions"><a href="#precos" className="login">Entrar</a><a href="#precos" className="primary small">Criar conta grátis <ArrowRight /></a></div>
+          <div className="nav-actions"><Link to="/dashboard" className="login">Entrar</Link><Link to="/dashboard" className="primary small">Criar conta grátis <ArrowRight /></Link></div>
         </nav>
       </header>
 
