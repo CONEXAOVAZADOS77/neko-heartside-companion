@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Bot, Box, ChevronLeft, CircleUserRound, Clock3, Coins, Crown, Gift,
-  Image as ImageIcon, Instagram, LayoutGrid, LogOut, Menu, MessageSquare,
-  Monitor, Palette, Puzzle, Search, Sparkles, Store, UsersRound, Video,
-  WandSparkles, Waves, Workflow, Zap,
+  Bug, Eye, Flag, Image as ImageIcon, Instagram, LayoutGrid, Lightbulb, Lock,
+  LogOut, Menu, MessageCircle, MessageSquare, Monitor, Palette, Puzzle, Search,
+  Send, Shield, Sparkles, Star, Store, UsersRound, Video, WandSparkles, Waves,
+  X, Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
@@ -40,7 +41,10 @@ const tools = [
 const menuGroups = [
   { title: "INÍCIO", items: [[LayoutGrid, "Painel", true], [Gift, "Área de Membros"], [Bot, "NEKO Assistant"]] },
   { title: "TIKTOK SHOP", items: [[Store, "TikTok Shop"], [WandSparkles, "Mineração"], [Video, "TikTok Shop Vídeo"], [Puzzle, "Extensão"]] },
-  { title: "CRIAR FOTOS", items: [[Sparkles, "Gerar Foto"], [Crown, "Ver tutorial"]] },
+  { title: "CRIAR FOTOS", items: [[Sparkles, "Gerar Foto"], [Crown, "NEKO IMAGEM | +18"], [ImageIcon, "Foto Automática"], [Box, "Foto Clone"], [UsersRound, "Criar Influencer"]] },
+  { title: "CRIAR VÍDEOS", items: [[Video, "Gerar Vídeo"], [Crown, "NEKO VÍDEO | +18"], [WandSparkles, "Vídeo Automático"], [Monitor, "Motion Control"], [Workflow, "Flow Studio"]] },
+  { title: "FERRAMENTAS", items: [[Palette, "Wallpaper"], [Zap, "Upscale 4K"], [Waves, "Limpar Metadados"], [Shield, "Camuflar Criativo"]] },
+  { title: "MINHA CONTA", items: [[ImageIcon, "Minha Galeria"], [MessageSquare, "Biblioteca de Prompts"], [UsersRound, "Comunidade"], [Coins, "Créditos"]] },
 ] as const;
 
 function DashboardLogo() {
@@ -49,6 +53,9 @@ function DashboardLogo() {
 
 function Dashboard() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackType, setFeedbackType] = useState("Sugestão");
+  const [feedback, setFeedback] = useState("");
   return (
     <main className="app-dashboard">
       <aside className={menuOpen ? "dash-sidebar is-open" : "dash-sidebar"}>
@@ -76,8 +83,18 @@ function Dashboard() {
           </section>
 
           <section className="secondary-banner"><div><span>PRO</span><h2>GPT Image 2</h2><p>Crie imagens com precisão, estilo e qualidade profissional.</p></div><div className="art-row">{[upscaleAsset,style1,style2,style3,style4].map((asset,index)=><img src={asset.url} alt="Galeria de imagens criadas por IA" key={index}/>)}</div></section>
+
+          <section className="automation-banner"><span>⚡ AUTOMAÇÃO</span><h2>Vídeos automáticos</h2><p>Pipeline completo: extrai vídeo do TikTok, troca o rosto e devolve pronto pra postar —<br /> sem cliques.</p><Button><Sparkles /> Abrir Studio</Button><div>{[style2,style5,style3,style1,style6].map((asset,index)=><img src={asset.url} alt="Exemplo de vídeo automático" key={index}/>)}</div></section>
+
+          <section className="kling-banner"><div><span>HOT</span><h2>Kling 3.0 em 4K</h2><p>Vídeos cinematográficos em resolução 4K nativa.</p><strong>8<small>KLING<br/>3.0</small></strong></div><div>{[style4,style6,style1,style5,style2,style3,style6,style4,style1,style5].map((asset,index)=><img src={asset.url} alt="Cena cinematográfica gerada em 4K" key={index}/>)}</div></section>
+
+          <section className="uncensored-banner"><div><span>♨ 18+ · NEKO UNCENSORED</span><h2>Geração sem censura com qualidade de estúdio</h2><p>Crie cenas com realismo cinematográfico. Sem filtros, sem limites criativos — apenas resultados premium.</p><small><Lock /> Conteúdo privado e seguro</small><Button><Sparkles /> Abrir NEKO Uncensored</Button></div><div className="uncensored-preview"><Button variant="secondary"><Eye /> Toque para revelar (18+)</Button></div></section>
+          <h3 className="generations-title"><Zap /> Suas gerações</h3>
+          <section className="empty-generations"><div><Sparkles /></div><strong>Nenhuma geração ainda</strong><p>Comece criando seu primeiro conteúdo.</p><Button><Sparkles /> Criar</Button></section>
         </div>
       </section>
+      <Button className="feedback-fab" size="icon" onClick={() => setFeedbackOpen(true)} aria-label="Enviar opinião"><MessageCircle /></Button>
+      {feedbackOpen && <div className="feedback-overlay" role="presentation" onMouseDown={() => setFeedbackOpen(false)}><section className="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedback-title" onMouseDown={(event) => event.stopPropagation()}><Button variant="ghost" size="icon" className="feedback-close" onClick={() => setFeedbackOpen(false)} aria-label="Fechar"><X /></Button><h2 id="feedback-title">Mande sua opinião</h2><p>Sugestões, reclamações, avaliações ou bugs — tudo conta</p><label>TIPO</label><div className="feedback-types">{[[Lightbulb,"Sugestão"],[Star,"Avaliação"],[Flag,"Reclamação"],[Bug,"Bug"]].map(([Icon,label])=><button className={feedbackType===label?"active":""} onClick={()=>setFeedbackType(label as string)} key={label as string}><Icon /><span>{label as string}</span></button>)}</div><label htmlFor="feedback-text">SUA SUGESTÃO</label><textarea id="feedback-text" value={feedback} maxLength={4000} onChange={(event)=>setFeedback(event.target.value)} placeholder="Ex: Seria legal se tivesse um botão pra duplicar influencer..."/><small>{feedback.length}/4000</small><div className="feedback-actions"><Button variant="outline" onClick={()=>setFeedbackOpen(false)}><X /> Cancelar</Button><Button disabled={!feedback.trim()} onClick={()=>{setFeedback("");setFeedbackOpen(false)}}><Send /> Enviar</Button></div></section></div>}
     </main>
   );
 }
