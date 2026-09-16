@@ -12,6 +12,7 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import workflowAsset from "../assets/workflow.gif.asset.json";
 import videosAsset from "../assets/videos.gif.asset.json";
 import upscaleAsset from "../assets/upscale.webp.asset.json";
@@ -85,6 +86,37 @@ function SectionTitle({ eyebrow, children, text }: { eyebrow: string; children: 
   return <div className="section-heading"><span>{eyebrow}</span><h2>{children}</h2>{text && <p>{text}</p>}</div>;
 }
 
+const rotatingWords = ["influencers", "vídeos UGC", "fotos realistas", "avatares"];
+
+function RotatingWord() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    let transitionTimer: ReturnType<typeof setTimeout> | undefined;
+    const rotationTimer = setInterval(() => {
+      setIsVisible(false);
+      transitionTimer = setTimeout(() => {
+        setWordIndex((current) => (current + 1) % rotatingWords.length);
+        setIsVisible(true);
+      }, 360);
+    }, 3200);
+
+    return () => {
+      clearInterval(rotationTimer);
+      if (transitionTimer) clearTimeout(transitionTimer);
+    };
+  }, []);
+
+  return (
+    <span className="rotating-word-shell">
+      <em className={isVisible ? "rotating-word is-visible" : "rotating-word"}>
+        {rotatingWords[wordIndex]}
+      </em>
+    </span>
+  );
+}
+
 function Index() {
   return (
     <main id="topo" className="site-shell">
@@ -99,7 +131,7 @@ function Index() {
       <section className="hero">
         <div className="hero-glow" />
         <div className="model-pill"><Sparkles /> Sora 2 · Veo 3.1 · Kling 3.0 · Nano Banana — tudo em um lugar</div>
-        <h1>Crie <em>influencers</em><br />que vendem por você.</h1>
+        <h1>Crie <RotatingWord /><br />que vendem por você.</h1>
         <p>Os melhores modelos de IA do mundo — que custariam <strong>+R$ 3.900/mês</strong><br className="desktop" /> separados — em uma única plataforma. Pague só pelo que gerar, a partir de <strong>R$ 21.</strong></p>
         <div className="hero-actions"><a href="#precos" className="primary">Criar minha primeira influencer <ArrowRight /></a><a href="#como-funciona" className="secondary"><CirclePlay /> Ver como funciona</a></div>
         <div className="mini-benefits"><span><Zap /> Comece em 1 minuto</span><span><Coins /> Economize seu dinheiro</span><span><Sparkles /> +10.000 criadores</span></div>

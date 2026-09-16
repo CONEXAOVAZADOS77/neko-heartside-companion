@@ -67,6 +67,9 @@ button, summary { font: inherit; }
 .model-pill svg { width: 13px; }
 .hero h1 { margin: 0; font-size: clamp(46px, 5vw, 73px); line-height: 1.04; font-weight: 850; }
 em { color: var(--primary); font-family: var(--font-editorial); font-weight: 400; }
+.rotating-word-shell { display: inline-block; min-width: 5ch; }
+.rotating-word { display: inline-block; opacity: 0; filter: blur(8px); transform: translateY(8px); transition: opacity .36s ease, filter .36s ease, transform .36s ease; }
+.rotating-word.is-visible { opacity: 1; filter: blur(0); transform: translateY(0); }
 .hero p { margin: 25px auto 0; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; }
 .hero p strong { color: var(--foreground); }
 .hero-actions { display: flex; justify-content: center; gap: 12px; margin-top: 27px; }
@@ -121,4 +124,4 @@ footer{max-width:1060px;margin:auto;padding:40px 28px 60px;border-top:1px solid 
 @media (max-width: 480px){
   .nav-actions .primary{font-size:0;width:40px;padding:0}.nav-actions .primary svg{width:15px}.hero h1{font-size:39px}.model-pill{font-size:8px}.hero-actions{flex-direction:column;align-items:stretch;padding:0 16px}.mini-benefits span{font-size:0;padding:8px}.mini-benefits svg{width:14px}.tool-grid,.use-grid,.templates{grid-template-columns:1fr}.use-grid article{height:430px}.media-grid article{grid-template-columns:1fr}.media-grid article .media-copy{position:relative!important;width:auto!important}.style-collage{grid-template-columns:repeat(2,1fr)}.adult-inner{padding-inline:18px}.adult-grid{gap:6px}.plan{padding:25px}.desktop{display:none}
 }
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.primary{transition:none}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.primary,.rotating-word{transition:none}}
