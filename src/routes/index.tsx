@@ -4,6 +4,8 @@ import {
   BadgeCheck,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CirclePlay,
   Coins,
   Layers3,
@@ -12,7 +14,8 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import workflowAsset from "../assets/workflow.gif.asset.json";
 import videosAsset from "../assets/videos.gif.asset.json";
 import upscaleAsset from "../assets/upscale.webp.asset.json";
@@ -117,6 +120,66 @@ function RotatingWord() {
   );
 }
 
+function StepsCarousel() {
+  const [activeStep, setActiveStep] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const goToStep = (step: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const nextStep = Math.max(0, Math.min(2, step));
+    track.scrollTo({ left: track.clientWidth * nextStep, behavior: "smooth" });
+    setActiveStep(nextStep);
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame: number | undefined;
+    const updateActiveStep = () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const width = track.clientWidth;
+        if (width > 0) setActiveStep(Math.round(track.scrollLeft / width));
+      });
+    };
+    track.addEventListener("scroll", updateActiveStep, { passive: true });
+    return () => {
+      track.removeEventListener("scroll", updateActiveStep);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return (
+    <div className="steps-carousel">
+      <div className="steps-track" ref={trackRef} aria-label="Etapas para criar e monetizar sua influencer">
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">01</span><span className="kicker">Crie & personalize</span><h3>Sua influencer perfeita em segundos</h3><p>Enquanto outros criadores gastam horas em edição, sua IA gera uma influencer fotorrealista pronta pra postar. Você escolhe rosto, corpo, estilo e personalidade — a Neko cuida do resto.</p><b><Sparkles /> Você nunca mais parte do zero</b></div>
+          <img src={createAsset.url} alt="Tela de criação de uma influencer virtual" />
+        </article>
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">02</span><span className="kicker">Estilize & produza</span><h3>Pare de gravar quando a IA pode produzir por você</h3><p>Sua influencer trabalha 24/7 — gerando ensaios, reels e stories automaticamente, com estilo consistente e cenários ilimitados.</p><b><Sparkles /> Conteúdo profissional no piloto automático</b></div>
+          <div className="style-collage">{[style1,style2,style3,style4,style5,style6].map((asset,index)=><img src={asset.url} alt={`Estilo visual ${index + 1}`} key={asset.url}/>)}</div>
+        </article>
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Publique no TikTok e Instagram com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Sparkles /> Toda oportunidade rastreada</b></div>
+          <img src={publishAsset.url} alt="Painel de publicação e monetização" />
+        </article>
+      </div>
+      <div className="steps-carousel-footer">
+        <div className="steps-progress" aria-label={`Etapa ${activeStep + 1} de 3`}>
+          {[0, 1, 2].map((step) => <button type="button" className={step <= activeStep ? "is-filled" : ""} aria-label={`Ir para etapa ${step + 1}`} onClick={() => goToStep(step)} key={step} />)}
+        </div>
+        <div className="steps-counter"><strong>0{activeStep + 1}</strong><span>/</span><span>03</span></div>
+        <div className="steps-arrows">
+          <Button type="button" variant="outline" size="icon" aria-label="Etapa anterior" disabled={activeStep === 0} onClick={() => goToStep(activeStep - 1)}><ChevronLeft /></Button>
+          <Button type="button" size="icon" aria-label="Próxima etapa" disabled={activeStep === 2} onClick={() => goToStep(activeStep + 1)}><ChevronRight /></Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Index() {
   return (
     <main id="topo" className="site-shell">
@@ -155,9 +218,7 @@ function Index() {
 
       <section id="como-funciona" className="section steps-section">
         <SectionTitle eyebrow="Como funciona" text="Crie a influencer, produza o conteúdo, publique e monetize. Sem ferramenta extra, sem editor, sem complicação.">Três passos pra sair do zero<br /> <em>e gerar receita</em>.</SectionTitle>
-        <div className="step reference-step"><div className="step-copy"><span className="step-number">01</span><span className="kicker">Crie & personalize</span><h3>Sua influencer perfeita em segundos</h3><p>Enquanto outros criadores gastam horas em edição, sua IA gera uma influencer fotorrealista pronta pra postar. Você escolhe rosto, corpo, estilo e personalidade — a Neko cuida do resto.</p><b><Sparkles /> Você nunca mais parte do zero</b></div><img src={createAsset.url} alt="Tela de criação de uma influencer virtual" /></div>
-        <div className="step reverse"><div className="step-copy"><span className="step-number">02</span><span className="kicker">Estilize & produza</span><h3>Pare de gravar quando a IA pode produzir por você</h3><p>Sua influencer trabalha 24/7 — gerando ensaios, reels e stories automaticamente, com estilo consistente e cenários ilimitados.</p><b><Check /> Conteúdo profissional no piloto automático</b></div><div className="style-collage">{[style1,style2,style3,style4,style5,style6].map((x,i)=><img src={x.url} alt={`Estilo visual ${i+1}`} key={i}/>)}</div></div>
-        <div className="step"><div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Publique no TikTok e Instagram com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Check /> Toda oportunidade rastreada</b></div><img src={publishAsset.url} alt="Painel de publicação e monetização" /></div>
+        <StepsCarousel />
       </section>
 
       <section id="galeria" className="section">

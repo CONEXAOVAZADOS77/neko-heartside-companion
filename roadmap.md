@@ -10,4 +10,4 @@
 - [ ] Conectar autenticação real após decidir se haverá dados de perfil
 - [x] Aproximar a primeira etapa da landing page da referência enviada
 
-- [ ] Transformar as etapas da landing page em carrossel lateral com setas e arraste
+- [x] Transformar as etapas da landing page em carrossel lateral com setas e arraste
