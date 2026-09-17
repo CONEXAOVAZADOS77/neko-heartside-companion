@@ -11,3 +11,5 @@
 - [x] Aproximar a primeira etapa da landing page da referência enviada
 
 - [x] Transformar as etapas da landing page em carrossel lateral com setas e arraste
+
+- [ ] Transformar a galeria 18+ em carrossel lateral igual à referência
