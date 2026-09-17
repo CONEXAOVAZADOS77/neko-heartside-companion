@@ -4,15 +4,20 @@ import {
   BadgeCheck,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CirclePlay,
   Coins,
+  Eye,
   Layers3,
+  Lock,
   Sparkles,
   WandSparkles,
   Workflow,
   Zap,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import workflowAsset from "../assets/workflow.gif.asset.json";
 import videosAsset from "../assets/videos.gif.asset.json";
 import upscaleAsset from "../assets/upscale.webp.asset.json";
@@ -117,6 +122,142 @@ function RotatingWord() {
   );
 }
 
+function StepsCarousel() {
+  const [activeStep, setActiveStep] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const goToStep = (step: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const nextStep = Math.max(0, Math.min(2, step));
+    track.scrollTo({ left: track.clientWidth * nextStep, behavior: "smooth" });
+    setActiveStep(nextStep);
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame: number | undefined;
+    const updateActiveStep = () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const width = track.clientWidth;
+        if (width > 0) setActiveStep(Math.round(track.scrollLeft / width));
+      });
+    };
+    track.addEventListener("scroll", updateActiveStep, { passive: true });
+    return () => {
+      track.removeEventListener("scroll", updateActiveStep);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return (
+    <div className="steps-carousel">
+      <div className="steps-track" ref={trackRef} aria-label="Etapas para criar e monetizar sua influencer">
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">01</span><span className="kicker">Crie & personalize</span><h3>Sua influencer perfeita em segundos</h3><p>Enquanto outros criadores gastam horas em edição, sua IA gera uma influencer fotorrealista pronta pra postar. Você escolhe rosto, corpo, estilo e personalidade — a Neko cuida do resto.</p><b><Sparkles /> Você nunca mais parte do zero</b></div>
+          <img src={createAsset.url} alt="Tela de criação de uma influencer virtual" />
+        </article>
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">02</span><span className="kicker">Estilize & produza</span><h3>Pare de gravar quando a IA pode produzir por você</h3><p>Sua influencer trabalha 24/7 — gerando ensaios, reels e stories automaticamente, com estilo consistente e cenários ilimitados.</p><b><Sparkles /> Conteúdo profissional no piloto automático</b></div>
+          <div className="style-collage">{[style1,style2,style3,style4,style5,style6].map((asset,index)=><img src={asset.url} alt={`Estilo visual ${index + 1}`} key={asset.url}/>)}</div>
+        </article>
+        <article className="step reference-step carousel-step">
+          <div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Publique no TikTok e Instagram com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Sparkles /> Toda oportunidade rastreada</b></div>
+          <img src={publishAsset.url} alt="Painel de publicação e monetização" />
+        </article>
+      </div>
+      <div className="steps-carousel-footer">
+        <div className="steps-progress" aria-label={`Etapa ${activeStep + 1} de 3`}>
+          {[0, 1, 2].map((step) => <button type="button" className={step <= activeStep ? "is-filled" : ""} aria-label={`Ir para etapa ${step + 1}`} onClick={() => goToStep(step)} key={step} />)}
+        </div>
+        <div className="steps-counter"><strong>0{activeStep + 1}</strong><span>/</span><span>03</span></div>
+        <div className="steps-arrows">
+          <Button type="button" variant="outline" size="icon" aria-label="Etapa anterior" disabled={activeStep === 0} onClick={() => goToStep(activeStep - 1)}><ChevronLeft /></Button>
+          <Button type="button" size="icon" aria-label="Próxima etapa" disabled={activeStep === 2} onClick={() => goToStep(activeStep + 1)}><ChevronRight /></Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdultCarousel() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [revealedSlides, setRevealedSlides] = useState<number[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const slides = gallery.slice(0, 6);
+
+  const goToSlide = (slide: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const nextSlide = Math.max(0, Math.min(slides.length - 1, slide));
+    const card = track.children.item(nextSlide) as HTMLElement | null;
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    setActiveSlide(nextSlide);
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame: number | undefined;
+    const updateActiveSlide = () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const center = track.scrollLeft + track.clientWidth / 2;
+        const cards = Array.from(track.children) as HTMLElement[];
+        let closest = 0;
+        let distance = Number.POSITIVE_INFINITY;
+        cards.forEach((card, index) => {
+          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          const nextDistance = Math.abs(cardCenter - center);
+          if (nextDistance < distance) {
+            closest = index;
+            distance = nextDistance;
+          }
+        });
+        setActiveSlide(closest);
+      });
+    };
+    track.addEventListener("scroll", updateActiveSlide, { passive: true });
+    updateActiveSlide();
+    return () => {
+      track.removeEventListener("scroll", updateActiveSlide);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const revealSlide = (slide: number) => {
+    setRevealedSlides((current) => current.includes(slide) ? current : [...current, slide]);
+  };
+
+  return (
+    <section className="adult-section">
+      <div className="adult-inner">
+        <div><span className="kicker">18+ — Sem censura</span><h2>Crie também <em>conteúdo sensual</em>.</h2><p>Uma plataforma com liberdade criativa para ensaios e conteúdo boudoir, com acesso exclusivo para maiores de idade.</p></div>
+        <div className="adult-carousel-shell">
+          <Button type="button" variant="outline" size="icon" className="adult-arrow adult-arrow-left" aria-label="Conteúdo anterior" disabled={activeSlide === 0} onClick={() => goToSlide(activeSlide - 1)}><ChevronLeft /></Button>
+          <div className="adult-carousel-track" ref={trackRef}>
+            {slides.map((asset, index) => {
+              const isRevealed = revealedSlides.includes(index);
+              return <article className={index === activeSlide ? "adult-slide is-active" : "adult-slide"} key={asset.url}>
+                <img className={isRevealed ? "is-revealed" : ""} src={asset.url} alt="Conteúdo com acesso restrito para maiores de 18 anos" />
+                <span className="adult-badge"><Lock /> 18+</span>
+                {!isRevealed && <Button type="button" variant="ghost" className="adult-reveal" onClick={() => revealSlide(index)}><Eye /><b>Toque para revelar</b></Button>}
+              </article>;
+            })}
+          </div>
+          <Button type="button" variant="outline" size="icon" className="adult-arrow adult-arrow-right" aria-label="Próximo conteúdo" disabled={activeSlide === slides.length - 1} onClick={() => goToSlide(activeSlide + 1)}><ChevronRight /></Button>
+        </div>
+        <div className="adult-dots" aria-label={`Conteúdo ${activeSlide + 1} de ${slides.length}`}>
+          {slides.map((asset, index) => <Button type="button" variant="ghost" size="icon" className={index === activeSlide ? "is-active" : ""} aria-label={`Ir para conteúdo ${index + 1}`} onClick={() => goToSlide(index)} key={asset.url} />)}
+        </div>
+        <small>Conteúdo destinado exclusivamente a maiores de 18 anos.</small>
+      </div>
+    </section>
+  );
+}
+
 function Index() {
   return (
     <main id="topo" className="site-shell">
@@ -155,9 +296,7 @@ function Index() {
 
       <section id="como-funciona" className="section steps-section">
         <SectionTitle eyebrow="Como funciona" text="Crie a influencer, produza o conteúdo, publique e monetize. Sem ferramenta extra, sem editor, sem complicação.">Três passos pra sair do zero<br /> <em>e gerar receita</em>.</SectionTitle>
-        <div className="step reference-step"><div className="step-copy"><span className="step-number">01</span><span className="kicker">Crie & personalize</span><h3>Sua influencer perfeita em segundos</h3><p>Enquanto outros criadores gastam horas em edição, sua IA gera uma influencer fotorrealista pronta pra postar. Você escolhe rosto, corpo, estilo e personalidade — a Neko cuida do resto.</p><b><Sparkles /> Você nunca mais parte do zero</b></div><img src={createAsset.url} alt="Tela de criação de uma influencer virtual" /></div>
-        <div className="step reverse"><div className="step-copy"><span className="step-number">02</span><span className="kicker">Estilize & produza</span><h3>Pare de gravar quando a IA pode produzir por você</h3><p>Sua influencer trabalha 24/7 — gerando ensaios, reels e stories automaticamente, com estilo consistente e cenários ilimitados.</p><b><Check /> Conteúdo profissional no piloto automático</b></div><div className="style-collage">{[style1,style2,style3,style4,style5,style6].map((x,i)=><img src={x.url} alt={`Estilo visual ${i+1}`} key={i}/>)}</div></div>
-        <div className="step"><div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Publique no TikTok e Instagram com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Check /> Toda oportunidade rastreada</b></div><img src={publishAsset.url} alt="Painel de publicação e monetização" /></div>
+        <StepsCarousel />
       </section>
 
       <section id="galeria" className="section">
@@ -175,7 +314,7 @@ function Index() {
         ].map(([t,p],i)=><article key={t}><span>{i===3?"Biblioteca":"Workflow Pronto"}</span><div className="template-icon"><Layers3 /></div><h3>{t}</h3><p>{p}</p><ArrowRight /></article>)}</div>
       </section>
 
-      <section className="adult-section"><div className="adult-inner"><div><span className="kicker">18+ — Sem censura</span><h2>Crie também <em>conteúdo sensual</em>.</h2><p>Uma plataforma com liberdade criativa para ensaios e conteúdo boudoir, com acesso exclusivo para maiores de idade.</p></div><div className="adult-grid">{gallery.slice(0,6).map((a,i)=><div key={i}><img src={a.url} alt="Conteúdo com acesso restrito para maiores de 18 anos"/><span>18+</span>{i===0&&<b>Toque para revelar</b>}</div>)}</div><small>Conteúdo destinado exclusivamente a maiores de 18 anos.</small></div></section>
+      <AdultCarousel />
 
       <section className="section savings">
         <SectionTitle eyebrow="Faça as contas" text="Os melhores modelos do mercado custam caro quando contratados individualmente. Na Neko IA, tudo fica em um único plano.">Quanto você pagaria <em>separado</em><br /> por tudo isso?</SectionTitle>

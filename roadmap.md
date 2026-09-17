@@ -9,3 +9,7 @@
 - [x] Adicionar botão rosa flutuante e formulário de opinião
 - [ ] Conectar autenticação real após decidir se haverá dados de perfil
 - [x] Aproximar a primeira etapa da landing page da referência enviada
+
+- [x] Transformar as etapas da landing page em carrossel lateral com setas e arraste
+
+- [x] Transformar a galeria 18+ em carrossel lateral igual à referência
