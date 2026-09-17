@@ -123,8 +123,9 @@ em { color: var(--primary); font-family: var(--font-editorial); font-weight: 400
 .steps-carousel { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--card); }
 .steps-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; touch-action: pan-x pan-y; }
 .steps-track::-webkit-scrollbar { display: none; }
-.steps-track .carousel-step { flex: 0 0 100%; width: 100%; scroll-snap-align: start; scroll-snap-stop: always; border: 0; border-radius: 0; }
-.carousel-step .style-collage { height: 510px; align-self: center; overflow: hidden; }
+.steps-track .carousel-step { flex: 0 0 100%; width: 100%; min-width: 0; max-width: 100%; scroll-snap-align: start; scroll-snap-stop: always; border: 0; border-radius: 0; }
+.carousel-step > * { min-width: 0; }
+.carousel-step .style-collage { width: 100%; height: 510px; align-self: center; overflow: hidden; }
 .steps-carousel-footer { min-height: 76px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 22px; padding: 0 28px; border-top: 1px solid var(--border); background: color-mix(in oklab, var(--background) 38%, var(--card)); }
 .steps-progress { width: min(410px, 100%); display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
 .steps-progress button { height: 3px; padding: 0; border: 0; border-radius: 0; cursor: pointer; background: var(--border); }
