@@ -8,3 +8,4 @@
 - [x] Completar as seções inferiores do painel conforme as novas capturas
 - [x] Adicionar botão rosa flutuante e formulário de opinião
 - [ ] Conectar autenticação real após decidir se haverá dados de perfil
+- [x] Aproximar a primeira etapa da landing page da referência enviada
