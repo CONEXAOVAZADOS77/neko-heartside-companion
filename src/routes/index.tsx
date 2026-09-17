@@ -8,7 +8,9 @@ import {
   ChevronRight,
   CirclePlay,
   Coins,
+  Eye,
   Layers3,
+  Lock,
   Sparkles,
   WandSparkles,
   Workflow,
@@ -180,6 +182,82 @@ function StepsCarousel() {
   );
 }
 
+function AdultCarousel() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [revealedSlides, setRevealedSlides] = useState<number[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const slides = gallery.slice(0, 6);
+
+  const goToSlide = (slide: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const nextSlide = Math.max(0, Math.min(slides.length - 1, slide));
+    const card = track.children.item(nextSlide) as HTMLElement | null;
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    setActiveSlide(nextSlide);
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame: number | undefined;
+    const updateActiveSlide = () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const center = track.scrollLeft + track.clientWidth / 2;
+        const cards = Array.from(track.children) as HTMLElement[];
+        let closest = 0;
+        let distance = Number.POSITIVE_INFINITY;
+        cards.forEach((card, index) => {
+          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          const nextDistance = Math.abs(cardCenter - center);
+          if (nextDistance < distance) {
+            closest = index;
+            distance = nextDistance;
+          }
+        });
+        setActiveSlide(closest);
+      });
+    };
+    track.addEventListener("scroll", updateActiveSlide, { passive: true });
+    updateActiveSlide();
+    return () => {
+      track.removeEventListener("scroll", updateActiveSlide);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const revealSlide = (slide: number) => {
+    setRevealedSlides((current) => current.includes(slide) ? current : [...current, slide]);
+  };
+
+  return (
+    <section className="adult-section">
+      <div className="adult-inner">
+        <div><span className="kicker">18+ — Sem censura</span><h2>Crie também <em>conteúdo sensual</em>.</h2><p>Uma plataforma com liberdade criativa para ensaios e conteúdo boudoir, com acesso exclusivo para maiores de idade.</p></div>
+        <div className="adult-carousel-shell">
+          <Button type="button" variant="outline" size="icon" className="adult-arrow adult-arrow-left" aria-label="Conteúdo anterior" disabled={activeSlide === 0} onClick={() => goToSlide(activeSlide - 1)}><ChevronLeft /></Button>
+          <div className="adult-carousel-track" ref={trackRef}>
+            {slides.map((asset, index) => {
+              const isRevealed = revealedSlides.includes(index);
+              return <article className={index === activeSlide ? "adult-slide is-active" : "adult-slide"} key={asset.url}>
+                <img className={isRevealed ? "is-revealed" : ""} src={asset.url} alt="Conteúdo com acesso restrito para maiores de 18 anos" />
+                <span className="adult-badge"><Lock /> 18+</span>
+                {!isRevealed && <Button type="button" variant="ghost" className="adult-reveal" onClick={() => revealSlide(index)}><Eye /><b>Toque para revelar</b></Button>}
+              </article>;
+            })}
+          </div>
+          <Button type="button" variant="outline" size="icon" className="adult-arrow adult-arrow-right" aria-label="Próximo conteúdo" disabled={activeSlide === slides.length - 1} onClick={() => goToSlide(activeSlide + 1)}><ChevronRight /></Button>
+        </div>
+        <div className="adult-dots" aria-label={`Conteúdo ${activeSlide + 1} de ${slides.length}`}>
+          {slides.map((asset, index) => <Button type="button" variant="ghost" size="icon" className={index === activeSlide ? "is-active" : ""} aria-label={`Ir para conteúdo ${index + 1}`} onClick={() => goToSlide(index)} key={asset.url} />)}
+        </div>
+        <small>Conteúdo destinado exclusivamente a maiores de 18 anos.</small>
+      </div>
+    </section>
+  );
+}
+
 function Index() {
   return (
     <main id="topo" className="site-shell">
@@ -236,7 +314,7 @@ function Index() {
         ].map(([t,p],i)=><article key={t}><span>{i===3?"Biblioteca":"Workflow Pronto"}</span><div className="template-icon"><Layers3 /></div><h3>{t}</h3><p>{p}</p><ArrowRight /></article>)}</div>
       </section>
 
-      <section className="adult-section"><div className="adult-inner"><div><span className="kicker">18+ — Sem censura</span><h2>Crie também <em>conteúdo sensual</em>.</h2><p>Uma plataforma com liberdade criativa para ensaios e conteúdo boudoir, com acesso exclusivo para maiores de idade.</p></div><div className="adult-grid">{gallery.slice(0,6).map((a,i)=><div key={i}><img src={a.url} alt="Conteúdo com acesso restrito para maiores de 18 anos"/><span>18+</span>{i===0&&<b>Toque para revelar</b>}</div>)}</div><small>Conteúdo destinado exclusivamente a maiores de 18 anos.</small></div></section>
+      <AdultCarousel />
 
       <section className="section savings">
         <SectionTitle eyebrow="Faça as contas" text="Os melhores modelos do mercado custam caro quando contratados individualmente. Na Neko IA, tudo fica em um único plano.">Quanto você pagaria <em>separado</em><br /> por tudo isso?</SectionTitle>

@@ -12,4 +12,4 @@
 
 - [x] Transformar as etapas da landing page em carrossel lateral com setas e arraste
 
-- [ ] Transformar a galeria 18+ em carrossel lateral igual à referência
+- [x] Transformar a galeria 18+ em carrossel lateral igual à referência
