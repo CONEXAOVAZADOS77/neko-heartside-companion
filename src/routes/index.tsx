@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
@@ -31,6 +31,9 @@ import style5 from "../assets/style5.webp.asset.json";
 import style6 from "../assets/style6.webp.asset.json";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/dashboard" });
+  },
   head: () => ({
     meta: [
       { title: "Neko IA — Crie influencers com inteligência artificial" },
