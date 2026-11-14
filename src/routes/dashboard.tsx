@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Bot, Box, ChevronLeft, CircleUserRound, Clock3, Coins, Crown, Gift,
   Bug, Eye, Flag, Image as ImageIcon, Instagram, LayoutGrid, Lightbulb, Lock,
-  LogOut, Menu, MessageCircle, MessageSquare, Monitor, Palette, Puzzle, Search,
+  Menu, MessageCircle, MessageSquare, Monitor, Palette, Puzzle, Search,
   Send, Shield, Sparkles, Star, Store, UsersRound, Video, WandSparkles, Waves,
   Workflow, X, Zap,
 } from "lucide-react";
@@ -62,7 +62,7 @@ function Dashboard() {
     <main className="app-dashboard">
       <aside className={menuOpen ? "dash-sidebar is-open" : "dash-sidebar"}>
         <div className="sidebar-top"><DashboardLogo /><Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} aria-label="Fechar menu"><ChevronLeft /></Button></div>
-        <div className="profile-block"><span><CircleUserRound /></span><div><strong>twcontinha</strong><small>FREE</small></div><LogOut /></div>
+        <div className="profile-block"><span><CircleUserRound /></span><div><strong>Visitante</strong><small>EXEMPLO</small></div></div>
         <div className="credit-chip"><Coins /> 2</div>
         <button className="daily"><Gift /><span><strong>Roleta Diária</strong><small>Volta em 20h 40m</small></span></button>
         <div className="dash-search"><Search /><span>Buscar na Neko...</span><kbd>⌘K</kbd></div>
@@ -75,7 +75,8 @@ function Dashboard() {
       <section className="dash-main">
         <header className="dash-mobile-header"><Button variant="ghost" size="icon" onClick={() => setMenuOpen(true)} aria-label="Abrir menu"><Menu /></Button><DashboardLogo /><div className="credit-chip"><Coins /> 2</div></header>
         <div className="dash-content">
-          <section className="welcome-bar"><div className="welcome-icon"><Crown /></div><div><span>BOM DIA, TWCONTINHA</span><h1>Explore</h1></div><div className="welcome-actions"><div className="credit-chip"><Coins /> 2</div><Button><b>＋</b> Upgrade</Button></div></section>
+          <p className="demo-banner">Demonstração pública. Nome, créditos e gerações são exemplos. Nenhuma conta é acessada aqui.</p>
+          <section className="welcome-bar"><div className="welcome-icon"><Crown /></div><div><span>DEMONSTRAÇÃO</span><h1>Explore</h1></div><div className="welcome-actions"><div className="credit-chip"><Coins /> 2</div><Button><b>＋</b> Upgrade</Button></div></section>
 
           <div className="tool-strip">{tools.map(([Icon, label, badge]) => <button key={label}><Icon /><span>{label}</span>{badge && <b>{badge}</b>}</button>)}</div>
 
