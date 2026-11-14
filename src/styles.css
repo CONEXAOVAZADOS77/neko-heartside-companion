@@ -165,6 +165,25 @@ footer{max-width:1060px;margin:auto;padding:40px 28px 60px;border-top:1px solid 
 .neko-face i,.neko-face b { position: absolute; width: 5px; height: 2px; top: 13px; background: var(--primary); border-radius: 100%; }
 .neko-face i { left: 7px; transform: rotate(18deg); }.neko-face b { right: 7px; transform: rotate(-18deg); }
 .neko-face em { position: absolute; width: 6px; height: 3px; left: 12px; bottom: 5px; border-bottom: 2px solid var(--primary); border-radius: 50%; }
+.track-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 22px; }
+.track-picker button { text-align: left; border: 1px solid var(--border); border-radius: 10px; background: var(--secondary); color: var(--foreground); padding: 10px 11px; cursor: pointer; }
+.track-picker button.is-active { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 10%, var(--card)); }
+.track-picker strong { display: block; font-size: 11px; }
+.track-picker span { display: block; margin-top: 4px; color: var(--muted-foreground); font-size: 8px; }
+.track-picker small { display: block; margin-top: 6px; color: var(--muted-foreground); font-size: 8px; line-height: 1.4; }
+.dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 920px; margin: 0 auto; }
+.dual-grid article { padding: 28px 24px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); }
+.dual-grid article.is-featured { border-color: color-mix(in oklab, var(--primary) 50%, var(--border)); background: linear-gradient(160deg, color-mix(in oklab, var(--primary) 12%, var(--card)), var(--card)); }
+.dual-grid span { color: var(--primary); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.dual-grid h3 { margin: 10px 0; font-size: 22px; }
+.dual-grid p { color: var(--muted-foreground); font-size: 14px; line-height: 1.6; margin: 0 0 18px; }
+.dual-grid button.primary, .dual-grid button.secondary { border: 0; cursor: pointer; }
+.track-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 4px; }
+.track-switch button { height: 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--secondary); color: var(--muted-foreground); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
+.track-switch button.is-active { border-color: var(--primary); color: var(--foreground); background: color-mix(in oklab, var(--primary) 14%, var(--card)); }
+.track-hint { margin: 12px 0 0; color: var(--muted-foreground); font-size: 12px; }
+.tool-strip-basic { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 760px) { .dual-grid { grid-template-columns: 1fr; } .track-picker { grid-template-columns: 1fr; } }
 .login-heading { margin-bottom: 27px; }
 .login-heading h1 { margin: 0 0 8px; font-size: 18px; line-height: 1.2; font-weight: 800; }
 .login-heading p { margin: 0; color: var(--muted-foreground); font-size: 10px; }
