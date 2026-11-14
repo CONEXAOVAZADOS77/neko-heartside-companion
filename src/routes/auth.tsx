@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Apple, Eye, EyeOff } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import photo1 from "../assets/dashboard/photo1.webp.asset.json";
 import photo2 from "../assets/dashboard/photo2.webp.asset.json";
@@ -13,6 +13,7 @@ import photo8 from "../assets/dashboard/photo8.webp.asset.json";
 import photo9 from "../assets/dashboard/photo9.webp.asset.json";
 import { Button } from "../components/ui/button";
 import { Checkbox } from "../components/ui/checkbox";
+import { TRACKS, readStoredTrack, saveTrack, type NekoTrack } from "../lib/tracks";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -48,10 +49,25 @@ function DashboardLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const [message, setMessage] = useState("");
+  const [track, setTrack] = useState<NekoTrack>("basico");
+
+  useEffect(() => {
+    setTrack(readStoredTrack());
+  }, []);
+
+  function chooseTrack(next: NekoTrack) {
+    setTrack(next);
+    saveTrack(next);
+  }
+
+  function enterDashboard() {
+    saveTrack(track);
+    navigate({ to: "/dashboard" });
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate({ to: "/dashboard" });
+    enterDashboard();
   }
 
   return (
@@ -61,7 +77,22 @@ function DashboardLogin() {
           <NekoLogo />
           <div className="login-heading">
             <h1 id="login-title">Bem-vindo de volta</h1>
-            <p>Entre e continue criando.</p>
+            <p>Escolha o modo da Neko IA e entre.</p>
+          </div>
+
+          <div className="track-picker" role="group" aria-label="Quem vai usar">
+            {(["basico", "avancado"] as const).map((option) => (
+              <button
+                type="button"
+                key={option}
+                className={track === option ? "is-active" : ""}
+                onClick={() => chooseTrack(option)}
+              >
+                <strong>{option === "basico" ? "Iniciante" : "Avançado"}</strong>
+                <span>{TRACKS[option].person}</span>
+                <small>{TRACKS[option].summary}</small>
+              </button>
+            ))}
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -87,7 +118,7 @@ function DashboardLogin() {
             <Button className="email-submit" type="submit">Entrar com email</Button>
             <div className="login-divider"><span>Ou</span></div>
 
-            <Button className="social-login" type="button" variant="outline" onClick={() => navigate({ to: "/dashboard" })}><GoogleIcon /> Continuar com Google</Button>
+            <Button className="social-login" type="button" variant="outline" onClick={enterDashboard}><GoogleIcon /> Continuar com Google</Button>
             <Button className="social-login" type="button" variant="outline" onClick={() => setMessage("O acesso com Apple estará disponível em breve.")}><Apple /> Continuar com Apple</Button>
             <p className="login-status" aria-live="polite">{message}</p>
           </form>

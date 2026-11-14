@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { saveTrack, type NekoTrack } from "../lib/tracks";
 import workflowAsset from "../assets/workflow.gif.asset.json";
 import videosAsset from "../assets/videos.gif.asset.json";
 import upscaleAsset from "../assets/upscale.webp.asset.json";
@@ -85,6 +86,22 @@ const faqs = [
 
 function Logo() {
   return <Link to="/" className="brand" aria-label="Neko IA, início"><span className="brand-mark">⌁</span> Neko <b>IA</b></Link>;
+}
+
+function TrackEntry({ track, className, children }: { track: NekoTrack; className: string; children: React.ReactNode }) {
+  const navigate = useNavigate();
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={() => {
+        saveTrack(track);
+        navigate({ to: "/auth" });
+      }}
+    >
+      {children}
+    </button>
+  );
 }
 
 function SectionTitle({ eyebrow, children, text }: { eyebrow: string; children: React.ReactNode; text?: string }) {
@@ -264,7 +281,7 @@ function Index() {
       <header className="nav-wrap">
         <nav className="nav-bar" aria-label="Navegação principal">
           <Logo />
-          <div className="nav-links"><a href="#recursos">Recursos</a><a href="#como-funciona">Como Funciona</a><a href="#galeria">Galeria</a><a href="#precos">Preços</a></div>
+          <div className="nav-links"><a href="#recursos">Recursos</a><a href="#duas-pessoas">Dois modos</a><a href="#como-funciona">Como Funciona</a><a href="#precos">Preços</a></div>
           <div className="nav-actions"><Link to="/auth" className="login">Entrar</Link><Link to="/auth" className="primary small">Criar conta grátis <ArrowRight /></Link></div>
         </nav>
       </header>
@@ -283,6 +300,24 @@ function Index() {
       </div>
 
       <section className="trust-band"><p>Usado por criadores, dropshippers e infoprodutores</p><div className="stats">{stats.map(([n,l]) => <div key={l}><strong>{n}</strong><span>{l}</span></div>)}</div></section>
+
+      <section id="duas-pessoas" className="section">
+        <SectionTitle eyebrow="Neko IA" text="Uma pasta, um produto, dois jeitos de usar. Quem está começando vê o essencial. Quem já opera IA entra no estúdio completo.">Feito para <em>duas pessoas</em>.</SectionTitle>
+        <div className="dual-grid">
+          <article>
+            <span>Iniciante</span>
+            <h3>Quem entende o básico de IA</h3>
+            <p>Foto, vídeo e influencer sem menu cheio. O caminho curto para gerar o primeiro conteúdo.</p>
+            <TrackEntry track="basico" className="secondary">Entrar no modo iniciante <ArrowRight /></TrackEntry>
+          </article>
+          <article className="is-featured">
+            <span>Avançado</span>
+            <h3>Quem já opera no dia a dia</h3>
+            <p>Flow Studio, Motion Control, TikTok Shop, automação e geração +18. Controle total da Neko IA.</p>
+            <TrackEntry track="avancado" className="primary">Entrar no modo avançado <ArrowRight /></TrackEntry>
+          </article>
+        </div>
+      </section>
 
       <section id="recursos" className="section">
         <SectionTitle eyebrow="Ferramentas">Tudo numa <em>ferramenta só</em>,<br /> sem 5 assinaturas diferentes.</SectionTitle>

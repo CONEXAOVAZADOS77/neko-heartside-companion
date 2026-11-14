@@ -1,26 +1,22 @@
-# Neko Heartside Companion
+# Neko IA
 
-quero que crie um site como esse https://kittyai.com.br/ precisa ser exatamente identico use o nome neko ia na minha versão
+Pasta do produto: **neko-ia**.
 
-This project was built with [Lovable](https://lovable.dev).
+Plataforma para criar influencers, fotos e vídeos com IA. O mesmo projeto atende **duas pessoas**:
 
-**Live app**: https://neko-heartside-companion.lovable.app
+| Perfil | Para quem | O que aparece |
+| --- | --- | --- |
+| **Iniciante** | Quem entende o básico de IA | Foto, vídeo, influencer, galeria e créditos |
+| **Avançado** | Quem já opera IA (você) | Flow Studio, Motion, TikTok Shop, automação e +18 |
 
-## Build with Lovable
+No login e no painel dá para trocar o modo. A escolha fica salva neste navegador.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/099cea35-d141-47f1-8c82-2acbfba084c3).
+**App na Lovable:** https://neko-heartside-companion.lovable.app
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Desenvolvimento
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+cd neko-ia
 npm i
 npm run dev
 ```
