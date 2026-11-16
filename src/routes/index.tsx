@@ -87,6 +87,21 @@ function Logo() {
   return <Link to="/" className="brand" aria-label="Neko IA, início"><span className="brand-mark">⌁</span> Neko <b>IA</b></Link>;
 }
 
+function FaqItem({ question, answer, initiallyOpen = false }: { question: string; answer: string; initiallyOpen?: boolean }) {
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    if (detailsRef.current && initiallyOpen) detailsRef.current.open = true;
+  }, [initiallyOpen]);
+
+  return (
+    <details ref={detailsRef}>
+      <summary>{question}<ChevronDown /></summary>
+      <p>{answer}</p>
+    </details>
+  );
+}
+
 function SectionTitle({ eyebrow, children, text }: { eyebrow: string; children: React.ReactNode; text?: string }) {
   return <div className="section-heading"><span>{eyebrow}</span><h2>{children}</h2>{text && <p>{text}</p>}</div>;
 }
@@ -326,7 +341,7 @@ function Index() {
         <div className="plan-grid">{plans.map(plan=><article className={plan.featured?"plan featured":"plan"} key={plan.name}>{plan.featured&&<div className="popular">🔥 Pague uma vez, use sempre</div>}<h3>{plan.name}</h3><span className="credits">{plan.credits}</span><div className="price"><sup>R$</sup>{plan.price}<small>{plan.suffix}</small></div><ul>{plan.features.map(f=><li key={f}><Check />{f}</li>)}</ul><a className={plan.featured?"primary":"secondary"} href="#topo">Assinar agora <ArrowRight /></a></article>)}</div><p className="free-note"><Check /> Grátis pra começar. Sem cartão.</p>
       </section>
 
-      <section className="section faq"><SectionTitle eyebrow="FAQ">Perguntas <em>frequentes</em>.</SectionTitle><div className="faq-list">{faqs.map(([q,a],i)=><details key={q} defaultOpen={i===0}><summary>{q}<ChevronDown /></summary><p>{a}</p></details>)}</div></section>
+      <section className="section faq"><SectionTitle eyebrow="FAQ">Perguntas <em>frequentes</em>.</SectionTitle><div className="faq-list">{faqs.map(([q,a],i)=><FaqItem key={q} question={q} answer={a} initiallyOpen={i===0} />)}</div></section>
 
       <footer><div><Logo /><p>Crie. Publique. Monetize.</p></div><div><a href="#recursos">Recursos</a><a href="#como-funciona">Como funciona</a><a href="#precos">Planos</a></div><p>© 2026 Neko IA. Todos os direitos reservados.</p></footer>
     </main>
