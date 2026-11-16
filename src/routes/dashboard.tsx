@@ -7,6 +7,7 @@ import {
   Workflow, X, Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { CreateStudio } from "../components/create-studio";
 import { Button } from "../components/ui/button";
 import style1 from "../assets/style1.webp.asset.json";
 import style2 from "../assets/style2.webp.asset.json";
@@ -86,6 +87,24 @@ function Dashboard() {
   const [feedback, setFeedback] = useState("");
   const [tourOpen, setTourOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const [screen, setScreen] = useState<"explore" | "photo" | "video">("explore");
+  const [tool, setTool] = useState("Gerar Foto");
+
+  const photoLabels = new Set(menuGroups[2].items.map((item) => item[1]));
+  const videoLabels = new Set(menuGroups[3].items.map((item) => item[1]));
+
+  const openLabel = (label: string) => {
+    if (label === "Painel") setScreen("explore");
+    if (photoLabels.has(label)) {
+      setScreen("photo");
+      setTool(label);
+    }
+    if (videoLabels.has(label)) {
+      setScreen("video");
+      setTool(label);
+    }
+    setMenuOpen(false);
+  };
 
   useEffect(() => {
     if (!localStorage.getItem(TOUR_KEY)) setTourOpen(true);
@@ -115,7 +134,7 @@ function Dashboard() {
         <button className="daily"><Gift /><span><strong>Roleta Diária</strong><small>Volta em 20h 40m</small></span></button>
         <div className="dash-search"><Search /><span>Buscar na Neko...</span><kbd>⌘K</kbd></div>
         <nav className="side-nav">
-          {menuGroups.map((group) => <div key={group.title}><h2>{group.title}</h2>{group.items.map(([Icon, label, active]) => label === "Contas Sociais" ? <a className="side-link" href={socialUrl} target="_blank" rel="noreferrer" key={label}><Icon /><span>{label}</span></a> : <button className={active ? "active" : ""} key={label}><Icon /><span>{label}</span>{label === "TikTok Shop" && <b>SHOP</b>}</button>)}</div>)}
+          {menuGroups.map((group) => <div key={group.title}><h2>{group.title}</h2>{group.items.map(([Icon, label]) => label === "Contas Sociais" ? <a className="side-link" href={socialUrl} target="_blank" rel="noreferrer" key={label}><Icon /><span>{label}</span></a> : <button className={(label === "Painel" && screen === "explore") || label === tool && screen !== "explore" ? "active" : ""} key={label} onClick={() => openLabel(label)}><Icon /><span>{label}</span>{label === "TikTok Shop" && <b>SHOP</b>}</button>)}</div>)}
         </nav>
         <button className="replay-tour" type="button" onClick={replayTour}>Ver tutorial</button>
         <div className="sidebar-ai"><span className="neko-face"><i /><b /><em /></span><div><strong>Neko IA</strong><small>Powered by AI ✨</small></div></div>
@@ -127,7 +146,8 @@ function Dashboard() {
           <p className="demo-banner">Demonstração pública. Nome, créditos e gerações são exemplos. Nenhuma conta é acessada aqui.</p>
           <section className="welcome-bar"><div className="welcome-icon"><Crown /></div><div><span>DEMONSTRAÇÃO</span><h1>Explore</h1></div><div className="welcome-actions"><div className="credit-chip"><Coins /> 2</div><Button><b>＋</b> Upgrade</Button></div></section>
 
-          <div className="tool-strip">{tools.map(([Icon, label, badge]) => <button key={label}><Icon /><span>{label}</span>{badge && <b>{badge}</b>}</button>)}</div>
+          {screen === "explore" ? <>
+          <div className="tool-strip">{tools.map(([Icon, label, badge]) => <button key={label} onClick={() => label === "Imagem" ? openLabel("Gerar Foto") : label === "Vídeo" ? openLabel("Gerar Vídeo") : undefined}><Icon /><span>{label}</span>{badge && <b>{badge}</b>}</button>)}</div>
 
           <section className="feature-banner">
             <div className="feature-copy"><span>▦ NOVO</span><h2>Seedance 2.0</h2><p>O melhor modelo de vídeo do mundo, agora<br /> com 30% OFF.</p><div className="feature-fan">{[style6,style3,style2,style5].map((asset, index)=><img src={asset.url} alt="" key={index}/>)}</div></div>
@@ -142,7 +162,8 @@ function Dashboard() {
 
           <section className="uncensored-banner"><div><span>♨ 18+ · NEKO UNCENSORED</span><h2>Geração sem censura com qualidade de estúdio</h2><p>Crie cenas com realismo cinematográfico. Sem filtros, sem limites criativos — apenas resultados premium.</p><small><Lock /> Conteúdo privado e seguro</small><Button><Sparkles /> Abrir NEKO Uncensored</Button></div><div className="uncensored-preview"><Button variant="secondary"><Eye /> Toque para revelar (18+)</Button></div></section>
           <h3 className="generations-title"><Zap /> Suas gerações</h3>
-          <section className="empty-generations"><div><Sparkles /></div><strong>Nenhuma geração ainda</strong><p>Comece criando seu primeiro conteúdo.</p><Button><Sparkles /> Criar</Button></section>
+          <section className="empty-generations"><div><Sparkles /></div><strong>Nenhuma geração ainda</strong><p>Comece criando seu primeiro conteúdo.</p><Button onClick={() => openLabel("Gerar Foto")}><Sparkles /> Criar</Button></section>
+          </> : <CreateStudio kind={screen} tool={tool} onTool={setTool} />}
         </div>
       </section>
       {tourOpen && <div className="tour-overlay" role="presentation"><section className="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-title"><div className="tour-top"><span><Sparkles /> PASSO {tourStep + 1} / {tourSteps.length}</span><Button variant="ghost" size="icon" onClick={closeTour} aria-label="Fechar tutorial"><X /></Button></div><div className="tour-progress" aria-hidden="true"><i style={{ width: `${((tourStep + 1) / tourSteps.length) * 100}%` }} /></div><h2 id="tour-title"><StepIcon /> {step.title}</h2><p>{step.text}</p>{step.href && <a className="tour-external" href={step.href} target="_blank" rel="noreferrer">Abrir contas sociais <ArrowRight /></a>}<div className="tour-actions"><button type="button" className="tour-skip" onClick={closeTour}>Pular tour</button><div><Button variant="outline" disabled={tourStep === 0} onClick={() => setTourStep((current) => current - 1)}><ArrowLeft /> Voltar</Button><Button onClick={() => lastStep ? closeTour() : setTourStep((current) => current + 1)}>{lastStep ? "Concluir tour" : <>Próximo <ArrowRight /></>}</Button></div></div></section></div>}
