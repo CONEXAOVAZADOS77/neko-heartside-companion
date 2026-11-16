@@ -29,6 +29,12 @@ import style3 from "../assets/style3.webp.asset.json";
 import style4 from "../assets/style4.webp.asset.json";
 import style5 from "../assets/style5.webp.asset.json";
 import style6 from "../assets/style6.webp.asset.json";
+import heroAvatar1 from "../assets/hero/hero-avatar-1.jpg";
+import heroAvatar2 from "../assets/hero/hero-avatar-2.jpg";
+import heroAvatar3 from "../assets/hero/hero-avatar-3.jpg";
+import heroAvatar4 from "../assets/hero/hero-avatar-4.jpg";
+import heroAvatar5 from "../assets/hero/hero-avatar-5.jpg";
+import heroAvatar6 from "../assets/hero/hero-avatar-6.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,6 +52,15 @@ export const Route = createFileRoute("/")({
 });
 
 const gallery = [style1, style2, style3, style4, style5, style6, style2, style4, style6, style1, style5, style3];
+
+const heroAvatars = [
+  { src: heroAvatar1, className: "slot-a" },
+  { src: heroAvatar2, className: "slot-b" },
+  { src: heroAvatar3, className: "slot-c" },
+  { src: heroAvatar4, className: "slot-d" },
+  { src: heroAvatar5, className: "slot-e" },
+  { src: heroAvatar6, className: "slot-f" },
+];
 
 const stats = [
   ["2.847", "Criadores ativos"],
@@ -286,6 +301,11 @@ function Index() {
 
       <section className="hero">
         <div className="hero-glow" />
+        <div className="hero-avatars" aria-hidden="true">
+          {heroAvatars.map((avatar) => (
+            <img className={`hero-avatar ${avatar.className}`} src={avatar.src} alt="" key={avatar.className} />
+          ))}
+        </div>
         <div className="model-pill"><Sparkles /> Sora 2 · Veo 3.1 · Kling 3.0 · Nano Banana — tudo em um lugar</div>
         <h1>Crie <RotatingWord /><br />que vendem por você.</h1>
         <p>Os melhores modelos de IA do mundo — que custariam <strong>+R$ 3.900/mês</strong><br className="desktop" /> separados — em uma única plataforma. Pague só pelo que gerar, a partir de <strong>R$ 21.</strong></p>
