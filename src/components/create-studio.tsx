@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { generateMedia } from "../lib/generate.functions";
 import { Button } from "./ui/button";
 
 type StudioKind = "photo" | "video";
@@ -103,12 +104,25 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
   const tools = kind === "photo" ? photoTools : videoTools;
   const current = tools.find((item) => item.title === tool) ?? tools[0];
   const [notice, setNotice] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const summary = current.fields.map((field) => String(data.get(field.name) ?? "").trim()).filter(Boolean).join(" · ");
-    setNotice(summary ? `Rascunho salvo nesta tela: ${summary}` : "Preencha pelo menos um campo para montar o rascunho.");
+    const form = new FormData(event.currentTarget);
+    const fields = Object.fromEntries(current.fields.map((field) => [field.name, String(form.get(field.name) ?? "")]));
+    setBusy(true);
+    setNotice("");
+    setMediaUrl("");
+    try {
+      const result = await generateMedia({ data: { kind, tool: current.title, fields } });
+      if (!result.ok) setNotice(result.error);
+      else setMediaUrl(result.url);
+    } catch {
+      setNotice("Não foi possível falar com o serviço de geração.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -120,7 +134,7 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
       </div>
       <div className="studio-tools" role="tablist">
         {tools.map((item) => (
-          <button type="button" role="tab" aria-selected={item.title === current.title} className={item.title === current.title ? "is-active" : ""} key={item.title} onClick={() => { setNotice(""); onTool(item.title); }}>
+          <button type="button" role="tab" aria-selected={item.title === current.title} className={item.title === current.title ? "is-active" : ""} key={item.title} onClick={() => { setNotice(""); setMediaUrl(""); onTool(item.title); }}>
             {item.title}
           </button>
         ))}
@@ -132,9 +146,11 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
             {field.multiline ? <textarea name={field.name} placeholder={field.placeholder} rows={4} /> : <input name={field.name} placeholder={field.placeholder} />}
           </label>
         ))}
-        <Button type="submit"><Sparkles /> Preparar {kind === "photo" ? "foto" : "vídeo"}</Button>
-        <p className="studio-note">Demonstração: nada é gerado nem enviado. O rascunho fica só nesta tela.</p>
+        <Button type="submit" disabled={busy}><Sparkles /> {busy ? "Gerando…" : kind === "photo" ? "Gerar foto" : "Gerar vídeo"}</Button>
+        <p className="studio-note">A geração roda no servidor com a chave FAL_KEY. O pedido não fica salvo nesta página.</p>
         {notice && <p className="studio-result" role="status">{notice}</p>}
+        {mediaUrl && kind === "photo" && <img className="studio-media" src={mediaUrl} alt="Foto gerada" />}
+        {mediaUrl && kind === "video" && <video className="studio-media" src={mediaUrl} controls />}
       </form>
     </section>
   );
