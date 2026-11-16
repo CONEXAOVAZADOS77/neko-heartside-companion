@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
@@ -31,6 +31,9 @@ import style5 from "../assets/style5.webp.asset.json";
 import style6 from "../assets/style6.webp.asset.json";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/dashboard" });
+  },
   head: () => ({
     meta: [
       { title: "Neko IA — Crie influencers com inteligência artificial" },
@@ -69,9 +72,9 @@ const useCases = [
 ];
 
 const plans = [
-  { name: "Starter", credits: "350 créditos", price: "69,90", suffix: "único", features: ["Sua influencer com identidade travada", "Foto → vídeo e texto → vídeo", "Modelos Sora 2, Veo 3.1 e Kling 3", "Motion Control incluso", "Ideal pra começar com acesso Pro"] },
+  { name: "Starter", credits: "350 créditos", price: "69,90", suffix: "único", features: ["Sua influencer com identidade travada", "Foto → vídeo e texto → vídeo", "Modelos Sora 2, Veo 3.1 e Kling 3 (HD)", "Motion Control incluso", "Vídeo Automático, TikTok Shop e Criar Influencer", "Genjutsu (troca de pessoas em vídeos) — ~5s em 480p", "Ideal pra começar com acesso Pro"] },
   { name: "Creator", credits: "1.000 créditos", price: "197", suffix: "/mês", features: ["Tudo do Starter, com mais volume", "Sora 2 Pro em 4K", "Prioridade máxima na fila", "Suporte premium", "Pra quem posta todo dia"] },
-  { name: "Vitalício", credits: "1.300 créditos", price: "259", suffix: "único", featured: true, features: ["Tudo do Creator — sem mensalidade", "Curso completo Neko Academy grátis", "Radar TikTok Shop ILIMITADO", "Bibliotecas de prompts e cenas virais", "Upscale 8K + acesso antecipado", "Comunidade VIP vitalícia"] },
+  { name: "Vitalício", credits: "1.300 créditos", price: "259", suffix: "único", featured: true, features: ["Tudo do Creator — sem mensalidade", "Curso completo Neko Academy (valor R$ 497) grátis", "Radar TikTok Shop ILIMITADO (produtos virais em tempo real)", "Bibliotecas de prompts, poses e cenas virais", "Upscale 8K + Seedance 2 desbloqueados", "Genjutsu + Trends virais (até 4 pessoas) — ~18s/mês em 480p", "Acesso antecipado a novos recursos", "Comunidade VIP vitalícia"] },
 ];
 
 const faqs = [
@@ -89,37 +92,6 @@ function Logo() {
 
 function SectionTitle({ eyebrow, children, text }: { eyebrow: string; children: React.ReactNode; text?: string }) {
   return <div className="section-heading"><span>{eyebrow}</span><h2>{children}</h2>{text && <p>{text}</p>}</div>;
-}
-
-const rotatingWords = ["influencers", "vídeos UGC", "fotos realistas", "avatares"];
-
-function RotatingWord() {
-  const [wordIndex, setWordIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    let transitionTimer: ReturnType<typeof setTimeout> | undefined;
-    const rotationTimer = setInterval(() => {
-      setIsVisible(false);
-      transitionTimer = setTimeout(() => {
-        setWordIndex((current) => (current + 1) % rotatingWords.length);
-        setIsVisible(true);
-      }, 360);
-    }, 3200);
-
-    return () => {
-      clearInterval(rotationTimer);
-      if (transitionTimer) clearTimeout(transitionTimer);
-    };
-  }, []);
-
-  return (
-    <span className="rotating-word-shell">
-      <em className={isVisible ? "rotating-word is-visible" : "rotating-word"}>
-        {rotatingWords[wordIndex]}
-      </em>
-    </span>
-  );
 }
 
 function StepsCarousel() {
@@ -164,7 +136,7 @@ function StepsCarousel() {
           <div className="style-collage">{[style1,style2,style3,style4,style5,style6].map((asset,index)=><img src={asset.url} alt={`Estilo visual ${index + 1}`} key={asset.url}/>)}</div>
         </article>
         <article className="step reference-step carousel-step">
-          <div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Publique no TikTok e Instagram com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Sparkles /> Toda oportunidade rastreada</b></div>
+          <div className="step-copy"><span className="step-number">03</span><span className="kicker">Publique & monetize</span><h3>Configure uma vez. Faça caixa todos os dias.</h3><p>Poste direto no TikTok, Instagram e OnlyFans com agendamento automático. Monetize com assinaturas e conteúdo exclusivo — receita recorrente no automático.</p><b><Sparkles /> Toda oportunidade rastreada</b></div>
           <img src={publishAsset.url} alt="Painel de publicação e monetização" />
         </article>
       </div>
@@ -265,16 +237,16 @@ function Index() {
         <nav className="nav-bar" aria-label="Navegação principal">
           <Logo />
           <div className="nav-links"><a href="#recursos">Recursos</a><a href="#como-funciona">Como Funciona</a><a href="#galeria">Galeria</a><a href="#precos">Preços</a></div>
-          <div className="nav-actions"><Link to="/auth" className="login">Entrar</Link><Link to="/auth" className="primary small">Criar conta grátis <ArrowRight /></Link></div>
+          <div className="nav-actions"><Link to="/auth" className="login">Ver demonstração</Link><a href="#precos" className="primary small">Ver planos <ArrowRight /></a></div>
         </nav>
       </header>
 
       <section className="hero">
         <div className="hero-glow" />
         <div className="model-pill"><Sparkles /> Sora 2 · Veo 3.1 · Kling 3.0 · Nano Banana — tudo em um lugar</div>
-        <h1>Crie <RotatingWord /><br />que vendem por você.</h1>
-        <p>Os melhores modelos de IA do mundo — que custariam <strong>+R$ 3.900/mês</strong><br className="desktop" /> separados — em uma única plataforma. Pague só pelo que gerar, a partir de <strong>R$ 21.</strong></p>
-        <div className="hero-actions"><a href="#precos" className="primary">Criar minha primeira influencer <ArrowRight /></a><a href="#como-funciona" className="secondary"><CirclePlay /> Ver como funciona</a></div>
+        <h1>Crie vídeos UGC<br />para vender sem aparecer.</h1>
+        <p>Venda com vídeos para TikTok Shop e Reels sem gravar nem mostrar seu rosto. Ferramentas que custariam <strong>+R$ 3.900/mês</strong><br className="desktop" /> separados — em uma única plataforma. Pague só pelo que gerar, a partir de <strong>R$ 21.</strong></p>
+        <div className="hero-actions"><a href="#precos" className="primary">Começar a criar <ArrowRight /></a><a href="#como-funciona" className="secondary"><CirclePlay /> Ver como funciona</a></div>
         <div className="mini-benefits"><span><Zap /> Comece em 1 minuto</span><span><Coins /> Economize seu dinheiro</span><span><Sparkles /> +10.000 criadores</span></div>
       </section>
 
