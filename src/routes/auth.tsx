@@ -1,6 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Apple, Eye, EyeOff } from "lucide-react";
-import { useState, type FormEvent } from "react";
 
 import photo1 from "../assets/dashboard/photo1.webp.asset.json";
 import photo2 from "../assets/dashboard/photo2.webp.asset.json";
@@ -12,15 +10,14 @@ import photo7 from "../assets/dashboard/photo7.webp.asset.json";
 import photo8 from "../assets/dashboard/photo8.webp.asset.json";
 import photo9 from "../assets/dashboard/photo9.webp.asset.json";
 import { Button } from "../components/ui/button";
-import { Checkbox } from "../components/ui/checkbox";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Entrar — Neko IA" },
-      { name: "description", content: "Entre na Neko IA e continue criando influencers e conteúdos com inteligência artificial." },
-      { property: "og:title", content: "Entrar — Neko IA" },
-      { property: "og:description", content: "Acesse sua conta Neko IA e continue criando." },
+      { title: "Demonstração — Neko IA" },
+      { name: "description", content: "Prévia visual da Neko IA. Não há conta, senha nem login com Google ou Apple." },
+      { property: "og:title", content: "Demonstração — Neko IA" },
+      { property: "og:description", content: "Prévia visual. Nenhum dado de acesso é pedido ou validado." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -39,20 +36,8 @@ function NekoLogo() {
   );
 }
 
-function GoogleIcon() {
-  return <span className="google-mark" aria-hidden="true">G</span>;
-}
-
 function DashboardLogin() {
   const navigate = useNavigate({ from: "/auth" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(true);
-  const [message, setMessage] = useState("");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    navigate({ to: "/dashboard" });
-  }
 
   return (
     <main className="dashboard-login-page">
@@ -60,40 +45,12 @@ function DashboardLogin() {
         <div className="login-card">
           <NekoLogo />
           <div className="login-heading">
-            <h1 id="login-title">Bem-vindo de volta</h1>
-            <p>Entre e continue criando.</p>
+            <h1 id="login-title">Demonstração visual</h1>
+            <p>Não há conta, senha nem login com Google ou Apple. O painel ao lado é só uma prévia.</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="Digite seu email" autoComplete="email" required />
-
-            <div className="password-label">
-              <label htmlFor="password">Senha</label>
-              <a href="#recuperar" onClick={(event) => { event.preventDefault(); setMessage("A recuperação de senha estará disponível em breve."); }}>Esqueceu sua senha?</a>
-            </div>
-            <div className="password-field">
-              <input id="password" name="password" type={showPassword ? "text" : "password"} placeholder="Digite sua senha" autoComplete="current-password" required />
-              <Button type="button" variant="ghost" size="icon" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}>
-                {showPassword ? <EyeOff /> : <Eye />}
-              </Button>
-            </div>
-
-            <label className="remember-row">
-              <Checkbox checked={remember} onCheckedChange={(checked) => setRemember(checked === true)} />
-              <span>Lembrar meu login por 30 dias</span>
-            </label>
-
-            <Button className="email-submit" type="submit">Entrar com email</Button>
-            <div className="login-divider"><span>Ou</span></div>
-
-            <Button className="social-login" type="button" variant="outline" onClick={() => navigate({ to: "/dashboard" })}><GoogleIcon /> Continuar com Google</Button>
-            <Button className="social-login" type="button" variant="outline" onClick={() => setMessage("O acesso com Apple estará disponível em breve.")}><Apple /> Continuar com Apple</Button>
-            <p className="login-status" aria-live="polite">{message}</p>
-          </form>
-
-          <p className="signup-line">Ainda não tem conta? <a href="#criar" onClick={(event) => { event.preventDefault(); setMessage("A criação de conta estará disponível em breve."); }}>Criar</a></p>
-          <p className="login-legal">Ao continuar, você concorda com a <a href="#privacidade">Política de Privacidade</a> e os <a href="#termos">Termos de uso</a>.</p>
+          <Button className="email-submit" type="button" onClick={() => navigate({ to: "/dashboard" })}>Abrir o painel de demonstração</Button>
+          <p className="signup-line"><Link to="/">Voltar para a página inicial</Link></p>
         </div>
       </section>
 
