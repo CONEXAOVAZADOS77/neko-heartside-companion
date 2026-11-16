@@ -1,7 +1,8 @@
 import { Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import { generateMedia } from "../lib/generate.functions";
 import { Button } from "./ui/button";
+
+const mediaApi = import.meta.env.VITE_MEDIA_API ?? "http://127.0.0.1:8787";
 
 type StudioKind = "photo" | "video";
 
@@ -110,16 +111,26 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const fields = Object.fromEntries(current.fields.map((field) => [field.name, String(form.get(field.name) ?? "")]));
+    const fields = current.fields.map((field) => String(form.get(field.name) ?? "").trim()).filter(Boolean);
+    const style = String(form.get("style") ?? "none").trim() || "none";
     setBusy(true);
     setNotice("");
     setMediaUrl("");
     try {
-      const result = await generateMedia({ data: { kind, tool: current.title, fields } });
-      if (!result.ok) setNotice(result.error);
+      const response = await fetch(`${mediaApi}/api/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: [current.title, ...fields].join(". "),
+          mediaType: kind === "photo" ? "image" : "video",
+          style,
+        }),
+      });
+      const result = (await response.json()) as { ok: boolean; url?: string; error?: string };
+      if (!result.ok || !result.url) setNotice(result.error ?? "A geração não devolveu um arquivo.");
       else setMediaUrl(result.url);
     } catch {
-      setNotice("Não foi possível falar com o serviço de geração.");
+      setNotice("Não foi possível falar com o backend da GPU.");
     } finally {
       setBusy(false);
     }
@@ -140,6 +151,10 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
         ))}
       </div>
       <form className="studio-form" onSubmit={submit} key={current.title}>
+        <label>
+          LoRA / estilo
+          <input name="style" placeholder="none ou nome.safetensors" defaultValue="none" />
+        </label>
         {current.fields.map((field) => (
           <label key={field.name}>
             {field.label}
@@ -147,7 +162,7 @@ export function CreateStudio({ kind, tool, onTool }: { kind: StudioKind; tool: s
           </label>
         ))}
         <Button type="submit" disabled={busy}><Sparkles /> {busy ? "Gerando…" : kind === "photo" ? "Gerar foto" : "Gerar vídeo"}</Button>
-        <p className="studio-note">A geração roda no servidor com a chave FAL_KEY. O pedido não fica salvo nesta página.</p>
+        <p className="studio-note">O pedido vai para o backend local, que envia o fluxo ao ComfyUI na GPU.</p>
         {notice && <p className="studio-result" role="status">{notice}</p>}
         {mediaUrl && kind === "photo" && <img className="studio-media" src={mediaUrl} alt="Foto gerada" />}
         {mediaUrl && kind === "video" && <video className="studio-media" src={mediaUrl} controls />}
