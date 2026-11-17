@@ -89,7 +89,7 @@ const plans = [
   { name: "Vitalício", credits: "1.300 créditos", price: "259", suffix: "único", featured: true, features: ["Tudo do Creator — sem mensalidade", "Curso completo Neko Academy grátis", "Radar TikTok Shop ILIMITADO", "Bibliotecas de prompts e cenas virais", "Upscale 8K + acesso antecipado", "Comunidade VIP vitalícia"] },
 ];
 
-const faqs = [
+const faqs: [string, string][] = [
   ["Preciso saber editar vídeo ou usar IA?", "Não. A Neko IA foi feita para ser simples: você escolhe a modelo, descreve o que quer e a plataforma gera tudo pronto — vídeo, voz e edição."],
   ["As modelos parecem realmente humanas?", "Sim. Usamos os modelos de IA mais avançados, com foco em texturas de pele, expressão facial e movimento natural."],
   ["Posso usar o conteúdo comercialmente?", "Sim. Todo conteúdo gerado pode ser usado em anúncios, redes sociais, dropshipping, infoprodutos e outros fins comerciais."],
