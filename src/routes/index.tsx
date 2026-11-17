@@ -314,7 +314,7 @@ function Index() {
       </section>
 
       <div className="photo-stream" aria-label="Exemplos de influencers criadas com IA">
-        {gallery.map((asset, i) => <img key={i} src={asset.url} alt={`Influencer virtual criada pela Neko IA ${i + 1}`} />)}
+        {[...heroAvatars, ...heroAvatars].map((avatar, i) => <img key={i} src={avatar.src} alt={`Influencer virtual criada pela Neko IA ${i + 1}`} />)}
       </div>
 
       <section className="trust-band"><p>Usado por criadores, dropshippers e infoprodutores</p><div className="stats">{stats.map(([n,l]) => <div key={l}><strong>{n}</strong><span>{l}</span></div>)}</div></section>
